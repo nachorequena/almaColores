@@ -1,0 +1,4 @@
+# Ignorar configuración sensible de Firebase
+/js/firebaseConfig.js
+
+
