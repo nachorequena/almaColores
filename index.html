@@ -384,7 +384,7 @@ document.getElementById("save").addEventListener("click", async () => {
       colors: currentPalette,
       createdAt: new Date().toISOString()
     });
-    Swal.fire({ icon: 'success', text: 'Paleta guardada ✅', timer: 1500 });
+    Swal.fire({ icon: 'success', text: 'Paleta guardada', timer: 1500 });
     loadPalettes();
   } catch (e) {
     Swal.fire({ icon: 'error', text: 'Error al guardar la paleta', confirmButton: true });
@@ -514,7 +514,7 @@ bwInput.addEventListener("change", () => {
 
 //FUNCION PARA CONVERTIR A BLANCO Y NEGRO
 toBwBtn.addEventListener("click", () => {
-  if (!currentImage) return Swal.fire("Primero cargá una imagen");
+  if (!currentImage) return Swal.fire({title: "Primero cargá una imagen", icon: "warning"});
   // Dibuja original
   ctx.filter = "none";
   ctx.drawImage(currentImage, 0, 0);
@@ -527,7 +527,7 @@ toBwBtn.addEventListener("click", () => {
   }
   ctx.putImageData(imgData, 0, 0);
   downloadBw.href = canvas.toDataURL("image/png");
-  Swal.fire("Imagen convertida a blanco y negro");
+  Swal.fire({title: "Imagen convertida a blanco y negro", icon: "success"});
 });
 //FIN FUNCION PARA CONVERTIR IMAGEN A BLANCO Y NEGRO
 
