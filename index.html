@@ -273,7 +273,9 @@ signinBtn.onclick = () => {
   },});
         document.getElementById('logout-btn').classList.remove('hidden');
       } catch (e) {
-        Swal.fire("Error al iniciar sesión", e.message, "error");
+        Swal.fire({title: "Error al iniciar sesión", text: "por favor intenta nuevamente", icon:"error", customClass: {
+    confirmButton: 'bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800'
+  }});
       }
     }
   });
@@ -294,7 +296,7 @@ signupBtn.onclick = () => {
         Swal.fire({title: "Cuenta creada correctamente", icon:"success", customClass: {
           confirmButton: 'bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800'}});
       } catch (e) {
-        Swal.fire({title: "Error al crear cuenta", icon:"error", customClass: {
+        Swal.fire({title: "Error al crear cuenta",text: "por favor intenta nuevamente", icon:"error", customClass: {
           confirmButton: 'bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800'}});
       }
     }
@@ -374,9 +376,10 @@ function generateColor() {
 //FUNCION GUARDAR PALETAS
 document.getElementById("save").addEventListener("click", async () => {
   if (!currentUser) {
-    return Swal.fire({title:"No has iniciado sesión", icon: "warning", text: "Debes iniciar sesión para poder guardar paletas"});
+    return Swal.fire({title:"No has iniciado sesión", icon: "warning", text: "Debes iniciar sesión para poder guardar paletas", showConfirmButton: false,
+  timer: 1500});
   }
-  if (currentPalette.length === 0) return Swal.fire({title:"Por favor selecciona una imágen", icon: "info", confirmButton: true, customClass: {
+  if (currentPalette.length === 0) return Swal.fire({title:"Selecciona una imágen por favor", icon: "warning", confirmButton: true, customClass: {
     confirmButton: 'bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800'}});;
   try {
     await addDoc(collection(db, "palettes"), {
@@ -387,7 +390,8 @@ document.getElementById("save").addEventListener("click", async () => {
     Swal.fire({ icon: 'success', text: 'Paleta guardada', timer: 1500 });
     loadPalettes();
   } catch (e) {
-    Swal.fire({ icon: 'error', text: 'Error al guardar la paleta', confirmButton: true });
+    Swal.fire({ icon: 'error', text: 'Error al guardar la paleta', showConfirmButton: false,
+  timer: 1500 });
   }
 });
 
@@ -417,7 +421,8 @@ const loadPalettes = async () => {
 
 inputPaleta.addEventListener("change", () => {
   const file = inputPaleta.files[0];
-  if (!file) return Swal.fire("Seleccioná una imagen primero");
+  if (!file) return Swal.fire({title: "Selecciona una imagen por favor", showConfirmButton: false,
+  timer: 1500});
 
   const img = new Image();
   img.onload = () => {
@@ -490,7 +495,8 @@ let cropRect     = null;
 // — CARGA Y MUESTRA IMAGEN —
 bwInput.addEventListener("change", () => {
   const file = bwInput.files[0];
-  if (!file) return Swal.fire("Seleccioná una imagen primero");
+  if (!file) return Swal.fire({title: "Selecciona una imagen por favor", showConfirmButton: false,
+  timer: 1500});
   const img = new Image();
   img.onload = () => {
     currentImage = img;
@@ -514,7 +520,8 @@ bwInput.addEventListener("change", () => {
 
 //FUNCION PARA CONVERTIR A BLANCO Y NEGRO
 toBwBtn.addEventListener("click", () => {
-  if (!currentImage) return Swal.fire({title: "Primero cargá una imagen", icon: "warning"});
+  if (!currentImage) return Swal.fire({title: "Selecciona una imágen por favor", icon: "warning", confirmButton: true, customClass: {
+    confirmButton: 'bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800'}});
   // Dibuja original
   ctx.filter = "none";
   ctx.drawImage(currentImage, 0, 0);
@@ -659,8 +666,10 @@ document.getElementById("copy-colors").addEventListener("click", () => {
   
   icon: "error",
   title: "No hay paleta generada",
-  text: "Por favor primero genera una paleta"
-});;
+  text: "Por favor primero genera una paleta",
+  showConfirmButton: false,
+  timer: 1000
+});
   const text = lastGeneratedColors.join(", ");
   navigator.clipboard.writeText(text)
     .then(() => {
@@ -685,7 +694,14 @@ document.getElementById("copy-colors").addEventListener("click", () => {
 
 // Exportar como JSON
 document.getElementById("export-json").addEventListener("click", () => {
-  if (lastGeneratedColors.length === 0) return alert("Primero genera una paleta.");
+  if (lastGeneratedColors.length === 0) return Swal.fire({
+  
+  icon: "error",
+  title: "No hay paleta generada",
+  text: "Por favor primero genera una paleta",
+  showConfirmButton: false,
+  timer: 1000
+});
   const blob = new Blob([JSON.stringify(lastGeneratedColors, null, 2)], { type: "application/json" });
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
@@ -697,7 +713,14 @@ document.getElementById("export-json").addEventListener("click", () => {
 
 // Exportar como imagen
 document.getElementById("export-image").addEventListener("click", () => {
-  if (lastGeneratedColors.length === 0) return alert("Primero genera una paleta.");
+  if (lastGeneratedColors.length === 0) return Swal.fire({
+  
+  icon: "error",
+  title: "No hay paleta generada",
+  text: "Por favor primero genera una paleta",
+  showConfirmButton: false,
+  timer: 1000
+});
 
   const canvas = document.createElement("canvas");
   const width = 100 * lastGeneratedColors.length;
